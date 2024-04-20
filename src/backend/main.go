@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"strings"
 	"sync"
-
 	"github.com/gocolly/colly"
+	"scraper/models"
 )
 
-type Link struct {
-	title string
-	url string
-}
 
 func main(){
 	// Instantiate default collector
@@ -20,7 +16,7 @@ func main(){
 	)
 
 	// Create channel
-	links := make(chan Link)
+	links := make(chan models.Link)
 
 	// Create wait group
 	var w sync.WaitGroup
@@ -37,8 +33,7 @@ func main(){
 
 		// Send link object to links channel
 		if text != "edit" && text != ""  && strings.HasPrefix(link, "/wiki") {
-			links <- Link{text, "https://en.wikipedia.org" + link}
-		}
+			links <- models.Link{Title: text, Url: "https://en.wikipedia.org" + link}}
 	})
 
 	// Before making a request print "Visiting ..."
@@ -64,6 +59,6 @@ func main(){
 		}()
 		
 	for val := range links {
-		fmt.Printf("title : %q, url : %s\n", val.title, val.url)
+		fmt.Printf("title : %q, url : %s\n", val.Title, val.Url)
 	}
 }
