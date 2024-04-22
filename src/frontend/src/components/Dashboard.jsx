@@ -1,9 +1,5 @@
 import React, {useState, useEffect } from 'react'
-import axios from "axios"
 import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import SearchIcon from '@mui/icons-material/Search';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -57,46 +53,10 @@ export default function Dashboard({onModeChange, onResultChange}) {
     const [queryResultData, setQueryResultData] = useState([])
     const [mode, setMode] = useState(true);
 
-  
-    const [isCollapsed, setIsCollapsed] = useState(true)
-    const [selectedPage, setSelectedPage] = useState({})
-
     useEffect(() => {
       onModeChange(mode);
     }, [mode]);
 
-    const endpoint = 'https://en.wikipedia.org/w/api.php?' // for search engine purposes
-    const params = {
-      action: "query",
-      format: "json",
-      generator: "prefixsearch",
-      prop: "info|pageprops|pageimages|pageterms",
-      ppprop: "displaytitle",
-      piprop: "thumbnail",
-      pithumbsize: 160,
-      pilimit: 30,
-      wbptterms: "description",
-      gpsnamespace: 0,
-      gpslimit: 5,
-      inprop: "url",
-      origin: "*"
-    }
-    async function fetchWikiPage(e){
-      e.preventDefault()
-      params.gpssearch = startPageInput
-      try {
-        const wikiresponse = await axios.get(endpoint, { params })
-        if (wikiresponse.error){
-          throw new Error("Fail fetching wikipedia page");
-        }
-        setQueryResultData(Object.values(wikiresponse.data.query.pages))
-        setIsCollapsed(false)
-        return Object.values(wikiresponse.data.query.pages)
-      } catch (error) {
-        console.log("Unexpected error occured")
-      }
-    }
-    
     async function handleSubmit(e){
       e.preventDefault()
       
@@ -117,33 +77,6 @@ export default function Dashboard({onModeChange, onResultChange}) {
       }
     }
 
-  function handleQueryClick(e,page){
-    console.log(page)
-    setStartPageInput(page.title)
-    setIsCollapsed(true)
-    setSelectedPage(page)
-  }
-    
-  console.log(startPageInput)
-  console.log(goalPageInput)
-  // function QueryResult({ queryResultData }) {
-  //   // const [isCollapsed, setIsCollapsed] = useState(true)
-  //   const [selectedPage, setSelectedPage] = useState(null)
-  //   const [selectedPageID, setSelectedPageID] = useState(null)
-  //   return (
-  //     <Box sx={{ flexGrow: 1 }}>
-  //       <Grid container spacing={2}>
-  //         <Grid item xs={6}>
-  //           <Item>xs=6</Item>
-  //         </Grid>
-  //         <Grid item xs>
-  //           <Item>xs</Item>
-  //         </Grid>
-  //       </Grid>
-  //     </Box>
-  //   )
-  // }
-
   // console.log(selectedPage)
   return (
     <div>
@@ -152,7 +85,6 @@ export default function Dashboard({onModeChange, onResultChange}) {
           <Query onPageInput={setStartPageInput} pageInput={startPageInput} onQueryResultChange={setQueryResultData} queryResultData={queryResultData} placeholder="Start page"/>
           <Query onPageInput={setGoalPageInput} pageInput={goalPageInput} onQueryResultChange={setQueryResultData} queryResultData={queryResultData} placeholder="Goal page"/>
         </div>
-
         <div className='relative'>
             <Stack direction="row" spacing={1} alignItems="center" >
               <Typography>BFS</Typography>

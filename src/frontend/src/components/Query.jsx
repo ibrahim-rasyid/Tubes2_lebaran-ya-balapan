@@ -1,10 +1,9 @@
-import React, {useState, useEffect } from 'react'
+import React, {useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import axios from "axios"
 
 export default function Query({onPageInput, pageInput, onQueryResultChange, queryResultData, placeholder}) {
     const [isCollapsed, setIsCollapsed] = useState(true)
-    const [selectedPage, setSelectedPage] = useState({})
 
     const endpoint = 'https://en.wikipedia.org/w/api.php?' // for search engine purposes
     const params = {
