@@ -30,7 +30,15 @@ func RunBFS(pageUrl string, target string) []models.Page{
 
 	var input = []models.Page{main_page}
 
-	return runBFSHelper(pageUrl, target, visited, step, input)
+	ret := runBFSHelper(pageUrl, target, visited, step, input)
+
+	ret = append(ret, main_page)
+
+	for i, j := 0, len(ret)-1; i < j; i, j = i+1, j-1 {
+		ret[i], ret[j] = ret[j], ret[i]
+	}
+
+	return ret
 }
 
 func runBFSHelper(start string, target string, visited map[string]bool, step map[models.Page]models.Page, to_be_processed []models.Page) []models.Page{
@@ -48,7 +56,18 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 
 				if temp[j].Url == target {
 					var ret []models.Page
-					ret = append(ret, temp[j])
+					step_temp := temp[j]
+
+					ret = append(ret, step_temp)
+
+					for {
+						if step[step_temp].Url == start {
+							break
+						} else {
+							ret = append(ret, step[step_temp])
+							step_temp = step[step_temp]
+						}
+					}
 					return ret
 				}
 			}
