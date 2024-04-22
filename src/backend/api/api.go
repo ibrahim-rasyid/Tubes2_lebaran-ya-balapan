@@ -97,6 +97,23 @@ func handleBFS(c *fiber.Ctx) error{
 	return c.JSON(response)
 }
 
+func GetTitle(url string) string{
+	c := colly.NewCollector()
+
+	var title string
+	c.OnHTML("title", func(e *colly.HTMLElement) {
+		title = e.Text
+	})
+
+	err := c.Visit(url)
+
+	if err != nil {
+		return ""
+	}
+
+	return title
+}
+
 func Init() {
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
