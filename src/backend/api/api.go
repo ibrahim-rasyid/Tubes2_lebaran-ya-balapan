@@ -13,7 +13,7 @@ import (
 )
 
 // scrape hyperlinks of a page
-func scraper(pageUrl string) []models.Page {
+func Scraper(pageUrl string) []models.Page {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
@@ -85,7 +85,7 @@ func handleBFS(c *fiber.Ctx) error{
 	// startPage := &models.Page{}
 	startTime := time.Now()
 	// result := algorithm.bfs(data[startUrl], data[goalUrl])
-	result := scraper(data["startUrl"]) // for testing purposes, nanti diubah
+	result := Scraper(data["startUrl"]) // for testing purposes, nanti diubah
 	endTime := time.Now()
 	executionTime := endTime.Sub(startTime)
 

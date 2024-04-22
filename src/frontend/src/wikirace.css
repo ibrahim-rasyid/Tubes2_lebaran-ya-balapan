@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Borel&family=Comfortaa:wght@300;400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   margin: 0;
@@ -23,21 +26,21 @@ body {
 
 .app {
   width: 80%;
-  height: 100vh;
+  height: 50vh;
   margin: auto;
-  display: grid;
-  grid-template-rows: 5% auto;
+  /* display: grid;
+  grid-template-rows: 20% auto; */
 }
 
 .app h1 {
-  margin: 10px;
+  margin: 20px;
   font-family:inherit;
   text-align: center;
   color: #222525;
-  font-size: 30px;
-  /* padding: 4rem 0 1rem; */
+  font-size: 50px;
 }
 
+/*
 .app .box {
   margin-top: 10px;
   margin-bottom: auto;
@@ -48,7 +51,6 @@ body {
 }
 
 .search-engine {
-  /* width: 750px; */
   background-color: #f8f5f2;
   border: 2px solid #232323;
   border-radius: 2%;
@@ -129,7 +131,6 @@ button:hover {
   color: #f8f5f2;
 }
 
-/* tablet */
 @media (max-width: 768px) {
   html {
     font-size: 40%;
@@ -140,3 +141,4 @@ button:hover {
     font-size: 40%;
   }
 }
+*/
