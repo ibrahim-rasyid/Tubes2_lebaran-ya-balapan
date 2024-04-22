@@ -6,6 +6,18 @@ import (
 	"scraper/models"
 )
 
+type Queue []models.Page
+
+func enqueue(q *Queue, element models.Page){
+	*q = append((*q), element)
+}
+
+func dequeue(q *Queue) models.Page {
+	element := (*q)[0]
+	*q = (*q)[1:]
+	return element
+}
+
 func RunBFS(pageUrl string, target string) []models.Page{
 	solution := make([]models.Page, 0, 5)
 	visited := make(map[string]bool)
@@ -29,5 +41,5 @@ func runBFSHelper(pageUrl string, target string, solution *[]models.Page, visite
 		}
     }
 
-	
+
 }
