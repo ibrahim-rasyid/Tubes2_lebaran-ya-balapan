@@ -1,1 +1,1 @@
-"# Tugas Besar 2 Strategi Algoritma" 
+# Tugas Besar 2 Strategi Algoritma

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"scraper/algorithm"
 	"fmt"
+	"scraper/algorithm"
 )
 
-func main(){
-	fmt.Println(algorithm.RunBFS("https://en.wikipedia.org/wiki/Joko_Widodo", "https://en.wikipedia.org/wiki/Law_enforcement"))
+func main() {
+	fmt.Println(algorithm.IDS("https://en.wikipedia.org/wiki/Tomato", "https://en.wikipedia.org/wiki/Apple_Inc."))
 }
