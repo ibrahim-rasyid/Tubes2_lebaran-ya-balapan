@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"scraper/models"
+	// "scraper/algorithm"
 	"strings"
 	"sync"
 	"github.com/gocolly/colly"
@@ -29,7 +30,7 @@ func Scraper(pageUrl string) []models.Page {
 	var w sync.WaitGroup
 
 	// On every a element which has href attribute, call callback
-	c.OnHTML("#bodyContent a[href]", func(e *colly.HTMLElement) {
+	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		// Extract link
 		link := e.Attr("href")
 		text := e.Text
@@ -39,7 +40,7 @@ func Scraper(pageUrl string) []models.Page {
 		// fmt.Println()
 
 		// Send link object to links channel
-		if text != "edit" && text != ""  && strings.HasPrefix(link, "/wiki") {
+		if /*text != "edit" && text != ""  && */strings.HasPrefix(link, "/wiki") {
 			links <- models.Page{Title: text, Url: "https://en.wikipedia.org" + link}
 		}
 	})
