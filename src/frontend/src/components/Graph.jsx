@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import * as d3 from 'd3';
-import data from './dummygraph'
+// import data from './dummygraph'
 // import { map, some, range, forEach, debounce } from 'lodash';
 // import { getWikipediaPageUrl } from '../utils';
 

@@ -1,4 +1,4 @@
-export const data = {
+export default data  = {
     "nodes": [
       {
         "id": 1,
