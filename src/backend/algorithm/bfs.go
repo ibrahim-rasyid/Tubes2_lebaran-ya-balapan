@@ -32,13 +32,19 @@ func RunBFS(pageUrl string, target string) []models.Page{
 
 	var input = []models.Page{main_page}
 
-	ret, depth := runBFSHelper(pageUrl, target, visited, step, input, 0)
+	ret, depth, count := runBFSHelper(pageUrl, target, visited, step, input, 1, 0)
 
-	fmt.Println(depth)
+	fmt.Println(depth , " ", "count : ", count)
 	ret = append(ret, main_page)
 
 	for i, j := 0, len(ret)-1; i < j; i, j = i+1, j-1 {
 		ret[i], ret[j] = ret[j], ret[i]
+	}
+
+	for i := range ret {
+		if ret[i].Title == ""{
+			ret[i].Title = api.GetTitle(ret[i].Url)
+		}
 	}
 
 	fmt.Println(time.Since((start)))
@@ -46,12 +52,16 @@ func RunBFS(pageUrl string, target string) []models.Page{
 	return ret
 }
 
-func runBFSHelper(start string, target string, visited map[string]bool, step map[models.Page]models.Page, to_be_processed []models.Page, depth int) ([]models.Page, int){
+func runBFSHelper(start string, target string, visited map[string]bool, step map[models.Page]models.Page, to_be_processed []models.Page, depth int, count int) ([]models.Page, int, int){
 	
 	var new_process []models.Page
 	
+
 	for i := range to_be_processed {
+		st := time.Now()
 		temp := api.Scraper(to_be_processed[i].Url)
+		count++
+		fmt.Println(time.Since((st)))
 		for j := len(temp) - 1 ; j >= 0 ; j--{
 			if !visited[temp[j].Url]{
 
@@ -73,7 +83,7 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 							step_temp = step[step_temp]
 						}
 					}
-					return ret, depth
+					return ret, depth, count
 				}
 			} else {
 				temp = append(temp[:j], temp[j+1:]...)
@@ -83,5 +93,5 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 	}
 
 	depth++
-	return runBFSHelper(start, target, visited, step, new_process, depth)
+	return runBFSHelper(start, target, visited, step, new_process, depth, count)
 }
