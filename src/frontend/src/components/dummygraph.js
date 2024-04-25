@@ -1,4 +1,4 @@
-export default data  = {
+const data  = {
     "nodes": [
       {
         "id": 1,
@@ -100,3 +100,5 @@ export default data  = {
       }
     ]
   }
+
+export default data;
