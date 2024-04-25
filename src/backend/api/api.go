@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"scraper/models"
+	// "scraper/algorithm"
 	"strings"
 	"sync"
 	"github.com/gocolly/colly"
@@ -13,6 +14,7 @@ import (
 )
 
 // scrape hyperlinks of a page
+func Scraper(pageUrl string) []models.Page {
 func Scraper(pageUrl string) []models.Page {
 	// Instantiate default collector
 	c := colly.NewCollector(
@@ -85,6 +87,8 @@ func handleBFS(c *fiber.Ctx) error{
 	// startPage := &models.Page{}
 	startTime := time.Now()
 	// result := algorithm.bfs(data[startUrl], data[goalUrl])
+	result := Scraper(data["startUrl"]) // for testing purposes, nanti diubah
+	// result := algorithm.runBFS(data[startUrl], data[goalUrl])
 	result := Scraper(data["startUrl"]) // for testing purposes, nanti diubah
 	endTime := time.Now()
 	executionTime := endTime.Sub(startTime)
