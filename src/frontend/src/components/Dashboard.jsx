@@ -1,71 +1,27 @@
 import React, {useState, useEffect } from 'react'
-import { styled } from '@mui/material/styles';
-import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Query from './Query';
+import Switch from './Switch';
+// import DAGGraph from './DAGGraph'
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 28,
-  height: 16,
-  padding: 0,
-  display: 'flex',
-  '&:active': {
-    '& .MuiSwitch-thumb': {
-      width: 15,
-    },
-    '& .MuiSwitch-switchBase.Mui-checked': {
-      transform: 'translateX(9px)',
-    },
-  },
-  '& .MuiSwitch-switchBase': {
-    padding: 2,
-    '&.Mui-checked': {
-      transform: 'translateX(12px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#177ddc' : '#1890ff',
-      },
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    transition: theme.transitions.create(['width'], {
-      duration: 200,
-    }),
-  },
-  '& .MuiSwitch-track': {
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor:
-      theme.palette.mode === 'dark' ? 'rgba(255,255,255,.35)' : 'rgba(0,0,0,.25)',
-    boxSizing: 'border-box',
-  },
-}));
-
-export default function Dashboard({onModeChange, onResultChange}) {
-    const [startPageInput, setStartPageInput] = useState('')
-    const [goalPageInput, setGoalPageInput] = useState('')
+export default function Dashboard({onResultChange, onSearch}) {
+    const [startPageInput, setStartPageInput] = useState({title:'', url:''})
+    const [goalPageInput, setGoalPageInput] = useState({title:'', url:''})
     const [queryResultData, setQueryResultData] = useState([])
-    const [mode, setMode] = useState(true);
+    const [isUsingBFS, setIsUsingBFS] = useState(true)
 
-    useEffect(() => {
-      onModeChange(mode);
-    }, [mode]);
+    function handleModeChange(){
+      setIsUsingBFS(!isUsingBFS)
+    }
 
     async function handleSubmit(e){
       e.preventDefault()
       
-      if (startPageInput && startPageInput != "" && goalPageInput && goalPageInput != ""){
-        // TO DO : Lift state up
+      if (startPageInput && startPageInput.title != "" && goalPageInput && goalPageInput.title != ""){
+        onSearch(true)
         const response = await fetch('http://localhost:8080/bfs', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({startPage: startPageInput, goalPage: goalPageInput, startUrl: queryResultData[0].fullurl, goalUrl: ''})
+          body: JSON.stringify({startPage: startPageInput.title, goalPage: goalPageInput.title, startUrl: startPageInput.url, goalUrl: goalPageInput.url})
         })
         
         if (!response.ok) {
@@ -77,21 +33,16 @@ export default function Dashboard({onModeChange, onResultChange}) {
       }
     }
 
-  // console.log(selectedPage)
   return (
     <div>
-      <form className='w-full relative grid grid-rows-2 gap-40 '>
-        <div className='relative grid grid-cols-2 gap-8' >
+      <form className='w-full relative grid grid-rows-2 gap-30 '>
+        <div className='relative grid grid-cols-2 gap-8 z-10' >
           <Query onPageInput={setStartPageInput} pageInput={startPageInput} onQueryResultChange={setQueryResultData} queryResultData={queryResultData} placeholder="Start page"/>
           <Query onPageInput={setGoalPageInput} pageInput={goalPageInput} onQueryResultChange={setQueryResultData} queryResultData={queryResultData} placeholder="Goal page"/>
         </div>
-        <div className='relative'>
-            <Stack direction="row" spacing={1} alignItems="center" >
-              <Typography>BFS</Typography>
-              <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-              <Typography>IDS</Typography>
-            </Stack>
-            <button type='button' onClick={(e) => handleSubmit(e)}>Search</button>
+        <div className='relative justify-self-center lg:top-0 top- z-0 flex flex-col'>
+          <Switch mode={isUsingBFS} onModeChange={handleModeChange} />
+          <button type='button' className='w-[100px] h-12 border-black border-2 bg-white hover:bg-[#efecea] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md mt-5 z-0' onClick={handleSubmit}>Search</button>
         </div>
       </form>
     </div>

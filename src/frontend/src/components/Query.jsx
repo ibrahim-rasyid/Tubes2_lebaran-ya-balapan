@@ -1,10 +1,11 @@
 import React, {useState } from 'react'
-import SearchIcon from '@mui/icons-material/Search';
 import axios from "axios"
+import nothumbnail from '../assets/nothumbnail.png'
 
 export default function Query({onPageInput, pageInput, onQueryResultChange, queryResultData, placeholder}) {
     const [isCollapsed, setIsCollapsed] = useState(true)
-
+    // const inputRef = useRef(null)
+    
     const endpoint = 'https://en.wikipedia.org/w/api.php?' // for search engine purposes
     const params = {
       action: "query",
@@ -13,58 +14,73 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
       prop: "info|pageprops|pageimages|pageterms",
       ppprop: "displaytitle",
       piprop: "thumbnail",
-      pithumbsize: 160,
+      pithumbsize: 50,
       pilimit: 30,
       wbptterms: "description",
       gpsnamespace: 0,
-      gpslimit: 5,
+      gpslimit: 6,
       inprop: "url",
       origin: "*"
     }
 
     async function fetchWikiPage(e){
-        e.preventDefault()
-        params.gpssearch = pageInput
-        console.log(pageInput)
-        try {
-          const wikiresponse = await axios.get(endpoint, { params })
-          if (wikiresponse.error){
+      // e.preventDefault()
+      params.gpssearch = e.target.value
+      try {
+        const wikiresponse = await axios.get(endpoint, { params })
+        if (wikiresponse.error){
             throw new Error("Fail fetching wikipedia page");
-          }
-          onQueryResultChange(Object.values(wikiresponse.data.query.pages))
-          setIsCollapsed(false)
-          return Object.values(wikiresponse.data.query.pages)
-        } catch (error) {
-          console.log("Unexpected error occured")
         }
+        onQueryResultChange(Object.values(wikiresponse.data.query.pages))
+        setIsCollapsed(false)
+        // return Object.values(wikiresponse.data.query.pages)
+      } catch (error) {
+        console.log("Unexpected error occured")
       }
+    }
 
-    function handleQueryClick(e,page){
-        onPageInput(page.title)
+    function handlePageSelect(e,page){
+        onPageInput({title:page.title, url:page.fullurl})
         setIsCollapsed(true)
-        setSelectedPage(page)
+    }
+
+    function handleQueryChange(e){
+      onPageInput({title:e.target.value, url:''})
+      fetchWikiPage(e)
     }
 
   return (
-    <div className='relative '>
-        <input 
-            type="search" 
-            placeholder= {placeholder}
-            className='w-full p-4 rounded-full bg-[#f8f5f2] '
-            value={pageInput}
-            onChange={e => onPageInput(e.target.value)}
-        />
-        <button onClick={fetchWikiPage} className='absolute right-1 top-1/2 -translate-y-1/2 p-4 rounded-full bg-[#f8f5f2a8] hover:bg-[#95dfdf]'>
-            <SearchIcon></SearchIcon>
-        </button>
-        {!isCollapsed &&  <div className='absolute top-20 p-4 bg-[#f8f5f2a8] text-[#222525] rounded-xl w-full flex flex-col gap-2 overflow-scroll '>
-            {queryResultData && queryResultData.map((page, id) => {
-                return (<div key={id} className='hover:bg-[#95dfdf] rounded-sm flex flex-col' onClick={(e)=>handleQueryClick(e,page)} >
-                    {page.thumbnail && <img src={page.thumbnail.source} alt={page.title} />} 
-                    <div className='flex flex-row'>
-                        <p>{page.title}</p>
-                        {page.terms && page.terms.description && <p>{page.terms.description[0]}</p>}
-                    </div>
+    <div className='relative'>
+        <div className='flex items-center w-full'>
+            <input
+                type="text"
+                placeholder={placeholder}
+                className={`border-black border-2  w-full p-2.5 ${isCollapsed? 'rounded-md' : 'rounded-t-md'} bg-white focus:outline-none`}
+                value={pageInput.title}
+                onChange={handleQueryChange}
+            />
+        </div>
+        {pageInput!= "" && !isCollapsed &&  <div className='absolute left-0 right-0 p-4 max-h-60 bg-white text-[#222525] rounded-b-md w-full flex flex-col gap-2 overflow-y-scroll scroll-smooth border-l-black border-b-black border-r-black border-2'>
+            {queryResultData && queryResultData.map((page,i) => {
+                return (
+                // <div 
+                //   key={page.id}
+                //   className='rounded-md py-1 flex items-center justify-between gap-5 hover:bg-[#efecea] cursor-pointer' 
+                //   onClick={(e)=>handlePageSelect(e,page)} > 
+                //     <div className='' >
+                //         <p className='font-medium'>{page.title}</p>
+                //         {page.terms && page.terms.description &&
+                //             <p className='text-sm text-gray-600'>{page.terms.description[0]}</p>}
+                //     </div>
+                <div key={page.id}
+                    className='flex flex-row px-3 py-8 items-center cursor-pointer overflow-hidden'
+                    onClick={(e)=>handlePageSelect(e,page)}>
+                  {page.thumbnail && <img src={page.thumbnail.source} className='w-[40px] h-[40px] mr-[12px] rounded-md border-black border-[0.5px]'/>}
+                  {!page.thumbnail && <img src={nothumbnail} className='w-[40px] h-[40px] mr-[12px] rounded-md border-black border-[0.5px]'/>}
+                  <div className='flex flex-col justify-center flex-[1]'>
+                      <p className='text-lg font-medium '>{page.title}</p>
+                      {page.terms && page.terms.description && <p className='text-sm'>{page.terms.description[0]}</p>}
+                  </div>
                 </div>)
             })}
         </div>}

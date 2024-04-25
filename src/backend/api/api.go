@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"scraper/models"
+	// "scraper/algorithm"
 	"strings"
 	"sync"
 	"github.com/gocolly/colly"
@@ -84,7 +85,7 @@ func handleBFS(c *fiber.Ctx) error{
 	
 	// startPage := &models.Page{}
 	startTime := time.Now()
-	// result := algorithm.bfs(data[startUrl], data[goalUrl])
+	// result := algorithm.runBFS(data[startUrl], data[goalUrl])
 	result := Scraper(data["startUrl"]) // for testing purposes, nanti diubah
 	endTime := time.Now()
 	executionTime := endTime.Sub(startTime)

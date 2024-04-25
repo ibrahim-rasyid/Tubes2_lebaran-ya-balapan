@@ -1,11 +1,11 @@
+import React from "react";
+
 import React from 'react'
 
-function Title() {
+export default function Navbar() {
   return (
     <div>
       
     </div>
   )
 }
-
-export default Title
