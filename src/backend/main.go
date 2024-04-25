@@ -1,9 +1,11 @@
 package main
 
 import (
-	"scraper/api"
+	"scraper/algorithm"
+	// "scraper/api"
+	"fmt"
 )
 
 func main(){
-	api.Init()
+	fmt.Println(algorithm.RunBFS("https://en.wikipedia.org/wiki/Joko_Widodo", "https://en.wikipedia.org/wiki/Volodymyr_Zelenskyy"))
 }
