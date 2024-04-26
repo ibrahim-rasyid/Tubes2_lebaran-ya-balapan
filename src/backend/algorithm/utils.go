@@ -48,7 +48,7 @@ func Scraper(pageUrl string) []models.Page {
 		text := e.Text
 
 		// Send link object to links channel
-		if strings.HasPrefix(link, "/wiki") && !strings.HasSuffix(link, "/Main_Page") {
+		if strings.HasPrefix(link, "/wiki") && !strings.HasSuffix(link, "/Main_Page")  && !strings.Contains(link,":") {
 			links <- models.Page{Title: text, Url: "https://en.wikipedia.org" + link}
 		}
 	})
