@@ -7,5 +7,5 @@ import (
 )
 
 func main(){
-	fmt.Println(algorithm.RunBFS("https://en.wikipedia.org/wiki/Joko_Widodo", "https://en.wikipedia.org/wiki/Volodymyr_Zelenskyy"))
+	fmt.Println(algorithm.RunBFS("https://en.wikipedia.org/wiki/Joko_Widodo", "https://en.wikipedia.org/wiki/Central_Java"))
 }
