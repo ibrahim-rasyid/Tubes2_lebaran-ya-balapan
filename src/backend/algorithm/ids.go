@@ -1,7 +1,61 @@
 package algorithm
 
-// import (
-// 	"scraper/models"
-// )
+import (
+	"scraper/api"
+	"scraper/models"
+	"time"
+)
 
-// TO DO
+func IDS(startUrl string, targetUrl string) models.Result {
+	var result models.Result
+	var steps []models.Page
+
+	startTitle := api.GetTitle(startUrl)
+	var startPage models.Page
+	startPage.Title = startTitle
+	startPage.Url = startUrl
+
+	targetTitle := api.GetTitle(targetUrl)
+	var targetPage models.Page
+	targetPage.Title = targetTitle
+	targetPage.Url = targetUrl
+	depth := 0
+	start := time.Now()
+	for {
+		visited := make(map[string]bool)
+		path := DLS(startPage, targetPage, visited, steps, depth)
+		if path != nil {
+			end := time.Now()
+			exe_time := end.Sub(start)
+			result.Accessed = len(visited)
+			result.Steps = path
+			result.N_step = depth
+			result.Time = exe_time.Seconds()
+			return result
+		}
+		depth++
+	}
+}
+
+func DLS(currentPage models.Page, targetPage models.Page, visited map[string]bool, steps []models.Page, depth int) []models.Page {
+	if currentPage.Url == targetPage.Url {
+		return []models.Page{currentPage}
+	}
+	if depth <= 0 {
+		return nil
+	}
+
+	childUrl := api.Scraper(currentPage.Url)
+	for _, page := range childUrl {
+		if !visited[page.Url] {
+			visited[page.Url] = true
+			steps = append(steps, page)
+			next := DLS(page, targetPage, visited, steps, depth-1)
+			if next != nil {
+				return append([]models.Page{currentPage}, next...)
+			}
+			steps = steps[:len(steps)-1]
+		}
+	}
+	return nil
+}
