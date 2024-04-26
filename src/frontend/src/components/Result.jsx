@@ -1,6 +1,7 @@
 import React from 'react'
 import ResultBox from './ResultBox'
-// import DAGGraph from './DAGGraph'
+import Graph from './Graph'
+import Graph2 from './Graph2'
 
 export default function Result({resultData}) {
   const resultCount = resultData.result.length
@@ -11,13 +12,15 @@ export default function Result({resultData}) {
       </div>
   ))
   return (
-    <div className='mt-20 lg:mt-0'>
+    <div className='mt-20 lg:mt-0 py-3'>
       <p className='text-center lg:py-5 text-xl ' >Found <strong>{resultCount} {resultCount === 1 ? ' path ' : ' paths '}</strong>
        from "{resultData.result[0].Title}" to "{resultData.result[resultCount-1].Title}" in <strong>{resultData.time} seconds!</strong></p>
         <p className='text-center text-2xl font-bold m-5 '>Path Found</p>
         <div className='mx-auto justify-center flex flex-row flex-wrap gap-10'>
           {Multiresults}
         </div>
+        <Graph2 paths={resultData.result} />
+        {/* <Graph paths={resultData.result} /> */}
     </div>
   )
 }

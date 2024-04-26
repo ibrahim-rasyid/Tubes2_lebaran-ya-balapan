@@ -35,12 +35,8 @@ func Scraper(pageUrl string) []models.Page {
 		link := e.Attr("href")
 		text := e.Text
 
-		// debug
-		// fmt.Printf("Link found : %q -> %s\n", text, link)
-		// fmt.Println()
-
 		// Send link object to links channel
-		if /*text != "edit" && text != ""  && */strings.HasPrefix(link, "/wiki") {
+		if strings.HasPrefix(link, "/wiki") {
 			links <- models.Page{Title: text, Url: "https://en.wikipedia.org" + link}
 		}
 	})
@@ -68,7 +64,6 @@ func Scraper(pageUrl string) []models.Page {
 	}()
 		
 	for val := range links {
-		// fmt.Printf("title : %q, url : %s\n", val.Title, val.Url)
 		result = append(result, val)
 	}
 	return result
@@ -83,7 +78,6 @@ func handleBFS(c *fiber.Ctx) error{
 		return err
 	}
 	
-	// startPage := &models.Page{}
 	startTime := time.Now()
 	// result := algorithm.bfs(data[startUrl], data[goalUrl])
 	result := Scraper(data["startUrl"]) // for testing purposes, nanti diubah

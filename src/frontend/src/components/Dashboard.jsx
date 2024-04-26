@@ -18,7 +18,7 @@ export default function Dashboard({onResultChange, onSearch}) {
       
       if (startPageInput && startPageInput.title != "" && goalPageInput && goalPageInput.title != ""){
         onSearch(true)
-        const response = await fetch('http://localhost:8080/bfs', {
+        const response = await fetch(`http://localhost:8080/${isUsingBFS? 'bfs' : "ids"}`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({startPage: startPageInput.title, goalPage: goalPageInput.title, startUrl: startPageInput.url, goalUrl: goalPageInput.url})
