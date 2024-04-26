@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Dashboard from './components/Dashboard'
 import Result from './components/Result'
 import header from './assets/header.png'
-import Graph from './components/Graph'
 
 const dummyData = {
   "result" : [
@@ -70,11 +69,9 @@ function App() {
         <div>
           <Dashboard onResultChange={handleResultChange} onSearch={setIsSearching} isSearching={isSearching} />
           {/* {!isSearching && <Result resultData={resultData}/>}  */}
-          {/* <Result resultData={resultData}/> */}
+          <Result resultData={resultData}/>
         </div>
       </div>
-
-      {/* <Graph/> */}
     </>
   )
 }

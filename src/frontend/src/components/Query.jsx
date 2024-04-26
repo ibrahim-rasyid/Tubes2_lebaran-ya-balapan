@@ -4,7 +4,6 @@ import nothumbnail from '../assets/nothumbnail.png'
 
 export default function Query({onPageInput, pageInput, onQueryResultChange, queryResultData, placeholder}) {
     const [isCollapsed, setIsCollapsed] = useState(true)
-    // const inputRef = useRef(null)
     
     const endpoint = 'https://en.wikipedia.org/w/api.php?' // for search engine purposes
     const params = {
@@ -24,7 +23,6 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
     }
 
     async function fetchWikiPage(e){
-      // e.preventDefault()
       params.gpssearch = e.target.value
       try {
         const wikiresponse = await axios.get(endpoint, { params })
@@ -33,7 +31,6 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
         }
         onQueryResultChange(Object.values(wikiresponse.data.query.pages))
         setIsCollapsed(false)
-        // return Object.values(wikiresponse.data.query.pages)
       } catch (error) {
         console.log("Unexpected error occured")
       }

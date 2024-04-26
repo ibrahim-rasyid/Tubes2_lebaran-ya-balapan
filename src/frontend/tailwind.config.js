@@ -10,6 +10,7 @@ export default {
       }
     },
   },
+  safelist: ['graph-wrapper'], 
   plugins: [],
 }
 
