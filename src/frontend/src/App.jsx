@@ -53,14 +53,14 @@ const dummyData = {
 
 function App() {
   const [isSearching, setIsSearching] = useState(true)
-  // const [resultData, setResultData] = useState({result:[], time:0})
-  const [resultData, setResultData] = useState(dummyData)
+  const [resultData, setResultData] = useState({steps:[], accessed: 0, n_step: 0, time:0})
+  // const [resultData, setResultData] = useState(dummyData)
 
   function handleResultChange(result){
     setResultData(result)
     setIsSearching(false)
   }
-
+  
   return (
     <>
       <div className='app '>
@@ -68,8 +68,8 @@ function App() {
         <p className='text-center text-2xl mb-5 ' >Find shortest path from</p>
         <div>
           <Dashboard onResultChange={handleResultChange} onSearch={setIsSearching} isSearching={isSearching} />
-          {/* {!isSearching && <Result resultData={resultData}/>}  */}
-          <Result resultData={resultData}/>
+          {!isSearching && <Result resultData={resultData}/>} 
+          {/* <Result resultData={resultData}/> */}
         </div>
       </div>
     </>

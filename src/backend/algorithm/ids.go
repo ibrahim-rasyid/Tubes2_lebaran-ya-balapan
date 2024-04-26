@@ -1,28 +1,29 @@
 package algorithm
 
 import (
-	"scraper/api"
+	// "fmt"
 	"scraper/models"
 	"time"
 )
 
-func IDS(startUrl string, targetUrl string) models.Result {
+func IDS(startTitle string, targetTitle string, startUrl string, targetUrl string) models.Result {
 	var result models.Result
 	var steps []models.Page
 
-	startTitle := api.GetTitle(startUrl)
 	var startPage models.Page
 	startPage.Title = startTitle
 	startPage.Url = startUrl
 
-	targetTitle := api.GetTitle(targetUrl)
 	var targetPage models.Page
 	targetPage.Title = targetTitle
 	targetPage.Url = targetUrl
 	depth := 0
+
 	start := time.Now()
 	for {
 		visited := make(map[string]bool)
+		// fmt.Println(startPage)
+		// fmt.Println(targetPage)
 		path := DLS(startPage, targetPage, visited, steps, depth)
 		if path != nil {
 			end := time.Now()
@@ -45,7 +46,7 @@ func DLS(currentPage models.Page, targetPage models.Page, visited map[string]boo
 		return nil
 	}
 
-	childUrl := api.Scraper(currentPage.Url)
+	childUrl := Scraper(currentPage.Url)
 	for _, page := range childUrl {
 		if !visited[page.Url] {
 			visited[page.Url] = true

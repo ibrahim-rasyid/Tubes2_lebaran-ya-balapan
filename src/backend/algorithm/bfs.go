@@ -3,8 +3,6 @@ package algorithm
 import ( 
 	"time"
 	"fmt"
-	// "fmt"
-	"scraper/api"
 	"scraper/models"
 )
 
@@ -28,7 +26,7 @@ func RunBFS(pageUrl string, target string) []models.Page{
 
 	var main_page models.Page
 
-	main_page.Title = api.GetTitle(pageUrl)
+	main_page.Title = GetTitle(pageUrl)
 	main_page.Url = pageUrl
 
 	var input = []models.Page{main_page}
@@ -44,7 +42,7 @@ func RunBFS(pageUrl string, target string) []models.Page{
 
 	for i := range ret {
 		if ret[i].Title == ""{
-			ret[i].Title = api.GetTitle(ret[i].Url)
+			ret[i].Title = GetTitle(ret[i].Url)
 		}
 	}
 
@@ -60,7 +58,7 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 
 	for i := range to_be_processed {
 		st := time.Now()
-		temp := api.Scraper(to_be_processed[i].Url)
+		temp := Scraper(to_be_processed[i].Url)
 		count++
 		fmt.Println(time.Since((st)))
 		for j := len(temp) - 1 ; j >= 0 ; j--{
