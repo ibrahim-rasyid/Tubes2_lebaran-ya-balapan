@@ -18,7 +18,7 @@ anything := algorithm.RunBFS("https://en.wikipedia.org/wiki/Adolf_Hitler", "http
 
 */
 
-func RunBFS(pageUrl string, target string, max_goroutine int, max_result int, use_max_res bool) models.Response{	// Run BFS function
+func RunBFS(pageUrl string, target string, max_goroutine int, max_result int) models.Response{	// Run BFS function
 
 	visited := make(map[string]bool)
 	step := make(map[models.Page]models.Page)
@@ -32,7 +32,7 @@ func RunBFS(pageUrl string, target string, max_goroutine int, max_result int, us
 	var input = []models.Page{main_page}
 
 	// ret, depth, count := runBFSHelper(pageUrl, target, visited, step, input, 1, 0)
-	ret, depth, count, runtime := runBFSGoRoutine(pageUrl, target, visited, input, step, 0, max_goroutine, max_result, use_max_res) // Main BFS function
+	ret, depth, count, runtime := runBFSGoRoutine(pageUrl, target, visited, input, step, 0, max_goroutine, max_result) // Main BFS function
 	fmt.Println(depth , " ", "count : ", count)
 
 	for i, j := 0, len(ret)-1; i < j; i, j = i+1, j-1 { // Result reversal for valid output
@@ -85,7 +85,7 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 	return runBFSHelper(start, target, visited, step, new_process, depth, count)
 }
 
-func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be_processed []models.Page, step map[models.Page]models.Page, depth int, max_go int, max_res int, ismax bool) ([][]models.Page, int, int, float64){
+func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be_processed []models.Page, step map[models.Page]models.Page, depth int, max_go int, max_res int) ([][]models.Page, int, int, float64){
 	st := time.Now()
 	
 	guard := make(chan struct{}, max_go)
@@ -148,7 +148,7 @@ func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be
 
 			}(to_be_processed[i])
 
-		if(len(result) >= max_res && ismax){ // if a maximum amount on answer is not omitted
+		if(len(result) >= max_res && max_res != 0){ // if a maximum amount on answer is not omitted
 			break
 		}
 	}
@@ -161,7 +161,7 @@ func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be
 
 	if len(result) == 0 {
 		depth++ // depth increment
-		return runBFSGoRoutine(start, target, visited, next_process, step, depth, max_go, max_res, ismax)
+		return runBFSGoRoutine(start, target, visited, next_process, step, depth, max_go, max_res)
 	} else {
 		return result, depth, len(visited), total_time
 	}

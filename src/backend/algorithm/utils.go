@@ -21,7 +21,7 @@ func GetTitle(url string) string{
 	if err != nil {
 		return ""
 	}
-
+	title = strings.Trim(title, " - Wikipedia")
 	return title
 }
 
@@ -45,7 +45,7 @@ func Scraper(pageUrl string) []models.Page {
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		// Extract link
 		link := e.Attr("href")
-		text := e.Text
+		text := e.Attr("title")
 
 		// Send link object to links channel
 		if strings.HasPrefix(link, "/wiki") && !strings.HasSuffix(link, "/Main_Page")  && !strings.Contains(link,":") {
