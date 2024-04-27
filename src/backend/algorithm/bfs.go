@@ -32,7 +32,7 @@ func RunBFS(pageUrl string, target string, max_goroutine int, max_result int) mo
 	var input = []models.Page{main_page}
 
 	// ret, depth, count := runBFSHelper(pageUrl, target, visited, step, input, 1, 0)
-	ret, depth, count, runtime := runBFSGoRoutine(pageUrl, target, visited, input, step, 0, max_goroutine, max_result) // Main BFS function
+	ret, depth, count, runtime := runBFSGoRoutine(pageUrl, target, visited, input, step, 1, max_goroutine, max_result) // Main BFS function
 	fmt.Println(depth , " ", "count : ", count)
 
 	for i, j := 0, len(ret)-1; i < j; i, j = i+1, j-1 { // Result reversal for valid output

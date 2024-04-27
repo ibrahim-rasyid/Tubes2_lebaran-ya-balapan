@@ -2,8 +2,9 @@ package api
 
 import (
 	"log"
-	"scraper/models"
 	"scraper/algorithm"
+	"scraper/models"
+	"strconv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -11,15 +12,18 @@ import (
 func handleBFS(c *fiber.Ctx) error{
 	var data map[string]string
 
-	// parse body to Page struct, binds the request body to Page struct
+	// parse body to data 
 	err := c.BodyParser(&data)
 	if err != nil{
 		return err
 	}
-
-	result := algorithm.IDS(data["startPage"], data["endPage"], data["startUrl"], data["goalUrl"]) //NANTI UBAH KE BFS
-
-	response := models.Result{
+	max_result, err := strconv.Atoi(data["maxResult"])
+    if err != nil {
+        return err
+    }
+	// run algo
+	result := algorithm.RunBFS(data["startUrl"], data["goalUrl"],20,max_result)
+	response := models.Response{
 		Steps: result.Steps,
 		Accessed: result.Accessed,
 		N_step: result.N_step,
@@ -33,12 +37,12 @@ func handleIDS(c *fiber.Ctx) error{
 	var data map[string]string
 	var temp_result [][]models.Page
 
-	// parse body to Page struct, binds the request body to Page struct
+	// parse body to data
 	err := c.BodyParser(&data)
 	if err != nil{
 		return err
 	}
-
+	// run algo
 	result := algorithm.IDS(data["startPage"], data["endPage"], data["startUrl"], data["goalUrl"])
 	temp_result = append(temp_result, result.Steps)
 	response := models.Response{

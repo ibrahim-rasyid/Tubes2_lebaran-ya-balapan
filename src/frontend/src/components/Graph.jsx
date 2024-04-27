@@ -10,19 +10,19 @@ export default function Graph({paths, resultCount}) {
 
       for (let index = 0; index < resultCount; index++) {
         paths[index].forEach((node, i) => {
-          const currentNodeID = node.Title;
+          const currentNodeID = node.title;
   
           if (!some(nodes, ['id', currentNodeID])) {
             nodes.push({
               id: currentNodeID,
-              title: node.Title,
+              title: node.title,
               degree: i,
             });
           }
   
           if (i !== 0) {
             links.push({
-              source: paths[index][i - 1].Title,
+              source: paths[index][i - 1].title,
               target: currentNodeID,
             });
           }
@@ -41,11 +41,11 @@ export default function Graph({paths, resultCount}) {
     const data = getGraphData()
     console.log(data)
     return (
-        <div className="justify-center overflow-hidden top-10 flex flex-row  max-w-[900px] max-h-[500px] mx-auto mb-40 relative bg-white rounded-md border-2 border-black">
+        <div className="justify-center overflow-hidden top-5 flex flex-row  max-w-[1200px] max-h-[700px] mx-auto mb-10 relative bg-white rounded-md border-2 border-black">
             <ForceGraph2D
-              width={900}
-              height={500}
-              minZoom={1.9}
+              width={1200}
+              height={700}
+              minZoom={1.5}
               graphData={data}
               nodeLabel="id"
               nodeAutoColorBy="degree"
@@ -54,7 +54,7 @@ export default function Graph({paths, resultCount}) {
                     const fontSize = 12/globalScale;
                     ctx.font = `${fontSize}px Sans-Serif`;
                     const textWidth = ctx.measureText(label).width;
-                    const radius = textWidth / 2 + 5;
+                    const radius = textWidth / 2 + 1;
 
                     ctx.beginPath();
                     ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);

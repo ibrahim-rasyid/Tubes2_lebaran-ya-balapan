@@ -5,14 +5,14 @@ import Graph from './Graph'
 export default function Result({resultData}) {
   const {accessed, n_step, steps, time} = resultData
   const resultCount = steps.length 
-  // if singleresult steps[steps.length-1].Title, steps[0].Title
-  // if multiresult steps[0][steps[0].length-1].Title, steps[0][0].Title
 
   return (
     <div className='mt-20 lg:mt-0 py-3'>
       <p className='text-center lg:py-5 text-xl ' >Found <strong>{resultCount} {resultCount === 1 ? ' path ' : ' paths '}</strong>
-       from "{steps[0][0].Title}" to "{steps[0][steps[0].length-1].Title}" with <strong>{accessed} accessed nodes </strong>
+       from "{steps[0][0].title}" to "{steps[0][steps[0].length-1].title}" with <strong>{accessed} accessed nodes </strong>
        and <strong>{n_step}</strong> {n_step === 1 ? 'step' : 'steps'} in <strong>{(time*1000).toFixed(2)} miliseconds!</strong></p>
+        <p className='text-center text-2xl font-bold m-5 '>Result: </p>
+        <Graph paths={steps} resultCount={resultCount} />
         <p className='text-center text-2xl font-bold m-5 '>Path Found</p>
         <div className='mx-auto justify-center flex flex-row flex-wrap gap-10'>
           {steps.map((path,i) => (
@@ -21,7 +21,6 @@ export default function Result({resultData}) {
             </div>
           ))}
         </div>
-        <Graph paths={steps} resultCount={resultCount} />
     </div>
   )
 }

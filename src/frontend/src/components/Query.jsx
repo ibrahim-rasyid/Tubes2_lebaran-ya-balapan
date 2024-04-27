@@ -2,7 +2,7 @@ import React, {useState } from 'react'
 import axios from "axios"
 import nothumbnail from '../assets/nothumbnail.png'
 
-export default function Query({onPageInput, pageInput, onQueryResultChange, queryResultData, placeholder}) {
+export default function Query({id, onPageInput, pageInput, onQueryResultChange, queryResultData, placeholder}) {
     const [isCollapsed, setIsCollapsed] = useState(true)
     
     const endpoint = 'https://en.wikipedia.org/w/api.php?' // for search engine purposes
@@ -50,6 +50,7 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
     <div className='relative'>
         <div className='flex items-center w-full'>
             <input
+                id={id}
                 type="text"
                 placeholder={placeholder}
                 className={`border-black border-2  w-full p-2.5 ${isCollapsed? 'rounded-md' : 'rounded-t-md'} bg-white focus:outline-none`}
