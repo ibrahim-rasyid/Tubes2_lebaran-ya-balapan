@@ -29,9 +29,22 @@ func IDS(startTitle string, targetTitle string, startUrl string, targetUrl strin
 			end := time.Now()
 			exe_time := end.Sub(start)
 			result.Accessed = len(visited)
-			result.Steps = path
 			result.N_step = depth
 			result.Time = exe_time.Seconds()
+
+			encountered := make(map[string]bool)
+			res := []models.Page{}
+			for _, i := range path {
+				if(!encountered[i.Url]){
+					encountered[i.Url] = true
+					i.Title = GetTitle(i.Url)
+					res = append(res, i)
+				}
+			}
+			result.N_step = len(res) - 1
+
+			result.Steps = res
+
 			return result
 		}
 		depth++
