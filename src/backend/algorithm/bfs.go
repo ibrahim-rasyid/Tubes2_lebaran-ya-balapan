@@ -2,7 +2,6 @@ package algorithm
 
 import (
 	"fmt"
-	"scraper/api"
 	"scraper/models"
 	"sync"
 	"time"
@@ -28,7 +27,7 @@ func RunBFS(pageUrl string, target string) [][]models.Page{
 
 	var main_page models.Page
 
-	main_page.Title = api.GetTitle(pageUrl)
+	main_page.Title = GetTitle(pageUrl)
 	main_page.Url = pageUrl
 
 	var input = []models.Page{main_page}
@@ -60,7 +59,7 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 	for i := range to_be_processed {
 		fmt.Println(i)
 		st := time.Now()
-		temp := api.Scraper(to_be_processed[i].Url)
+		temp := Scraper(to_be_processed[i].Url)
 		count++
 		fmt.Println(time.Since((st)))
 		for j := len(temp) - 1 ; j >= 0 ; j--{

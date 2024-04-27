@@ -4,7 +4,6 @@ import nothumbnail from '../assets/nothumbnail.png'
 
 export default function Query({onPageInput, pageInput, onQueryResultChange, queryResultData, placeholder}) {
     const [isCollapsed, setIsCollapsed] = useState(true)
-    // const inputRef = useRef(null)
     
     const endpoint = 'https://en.wikipedia.org/w/api.php?' // for search engine purposes
     const params = {
@@ -24,7 +23,6 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
     }
 
     async function fetchWikiPage(e){
-      // e.preventDefault()
       params.gpssearch = e.target.value
       try {
         const wikiresponse = await axios.get(endpoint, { params })
@@ -33,7 +31,6 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
         }
         onQueryResultChange(Object.values(wikiresponse.data.query.pages))
         setIsCollapsed(false)
-        // return Object.values(wikiresponse.data.query.pages)
       } catch (error) {
         console.log("Unexpected error occured")
       }
@@ -63,22 +60,13 @@ export default function Query({onPageInput, pageInput, onQueryResultChange, quer
         {pageInput!= "" && !isCollapsed &&  <div className='absolute left-0 right-0 p-4 max-h-60 bg-white text-[#222525] rounded-b-md w-full flex flex-col gap-2 overflow-y-scroll scroll-smooth border-l-black border-b-black border-r-black border-2'>
             {queryResultData && queryResultData.map((page,i) => {
                 return (
-                // <div 
-                //   key={page.id}
-                //   className='rounded-md py-1 flex items-center justify-between gap-5 hover:bg-[#efecea] cursor-pointer' 
-                //   onClick={(e)=>handlePageSelect(e,page)} > 
-                //     <div className='' >
-                //         <p className='font-medium'>{page.title}</p>
-                //         {page.terms && page.terms.description &&
-                //             <p className='text-sm text-gray-600'>{page.terms.description[0]}</p>}
-                //     </div>
-                <div key={page.id}
-                    className='flex flex-row px-3 py-8 items-center cursor-pointer overflow-hidden'
+                <div key={i}
+                    className=' flex flex-row px-2 py-[37px] items-center cursor-pointer overflow-hidden '
                     onClick={(e)=>handlePageSelect(e,page)}>
                   {page.thumbnail && <img src={page.thumbnail.source} className='w-[40px] h-[40px] mr-[12px] rounded-md border-black border-[0.5px]'/>}
                   {!page.thumbnail && <img src={nothumbnail} className='w-[40px] h-[40px] mr-[12px] rounded-md border-black border-[0.5px]'/>}
                   <div className='flex flex-col justify-center flex-[1]'>
-                      <p className='text-lg font-medium '>{page.title}</p>
+                      <p className='text-md font-medium whitespace-nowrap'>{page.title}</p>
                       {page.terms && page.terms.description && <p className='text-sm'>{page.terms.description[0]}</p>}
                   </div>
                 </div>)

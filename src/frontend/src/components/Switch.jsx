@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react'
 
-export default function ToggleSwitch() {
+export default function ToggleSwitch({isUsingBFS, onModeChange}) {
+  const [mode, setMode] = useState(true)
     
+  useEffect(() => {
+      onModeChange(mode)
+  }, [mode])
+
   return (
-    <label className="relative inline-flex items-center mb-5 cursor-pointer translate-x-7">
+    <label className="relative inline-flex items-center mb-5 cursor-pointer translate-x-7" onClick={e => setMode(!isUsingBFS)}>
       <input type="checkbox" value="" className="sr-only peer" />
       <div
         className="

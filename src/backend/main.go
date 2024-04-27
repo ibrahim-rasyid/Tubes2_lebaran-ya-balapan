@@ -1,23 +1,20 @@
 package main
 
 import (
-	"scraper/algorithm"
-	// "scraper/api"
-	"fmt"
-	// "scraper/models"
+	// "fmt"
+	// "scraper/algorithm"
+	"scraper/api"
 )
 
-func main(){
-	temp := algorithm.RunBFS("https://en.wikipedia.org/wiki/Anies_Baswedan", "https://en.wikipedia.org/wiki/Banana")
-	for i := range temp {
-		fmt.Println(temp[i])
-	}
-	// st := make(map[models.Page]models.Page)
-	// var mo models.Page
-	// mo.Title = "Ass"
-	// mo.Url = "woi"
-	// _, ok := st[mo]
-	// if ok  {
-	// 	fmt.Println("Gay")
+func main() {
+	// result := algorithm.IDS("Prabowo Subianto", "Jakarta", "https://en.wikipedia.org/wiki/Prabowo_Subianto", "https://en.wikipedia.org/wiki/Jakarta")
+	// fmt.Printf("%d\n%d\n", result.Accessed, result.N_step)
+	// for i, step := range result.Steps {
+	// 	if i != 0 {
+	// 		fmt.Print(" --> ")
+	// 	}
+	// 	fmt.Printf("%s", step.Title)
 	// }
+	// fmt.Printf("\n%f\n", result.Time)
+	api.Init();
 }
