@@ -2,10 +2,10 @@ package algorithm
 
 import (
 	"fmt"
-	"sync"
-	"time"
 	"scraper/api"
 	"scraper/models"
+	"sync"
+	"time"
 )
 
 // type Queue []models.Page
@@ -20,7 +20,7 @@ import (
 // 	return element
 // }
 
-func RunBFS(pageUrl string, target string) []models.Page{
+func RunBFS(pageUrl string, target string) [][]models.Page{
 	start := time.Now()
 	visited := make(map[string]bool)
 	step := make(map[models.Page]models.Page)
@@ -34,19 +34,19 @@ func RunBFS(pageUrl string, target string) []models.Page{
 	var input = []models.Page{main_page}
 
 	// ret, depth, count := runBFSHelper(pageUrl, target, visited, step, input, 1, 0)
-	ret, depth, count := runBFSGoRoutine(pageUrl, target, visited, input, step, 0, 20)
+	ret, depth, count := runBFSGoRoutine(pageUrl, target, visited, input, step, 0, 10)
 	fmt.Println(depth , " ", "count : ", count)
-	ret = append(ret, main_page)
+	// ret = append(ret, main_page)
 
 	for i, j := 0, len(ret)-1; i < j; i, j = i+1, j-1 {
 		ret[i], ret[j] = ret[j], ret[i]
 	}
 
-	for i := range ret {
-		if ret[i].Title == ""{
-			ret[i].Title = api.GetTitle(ret[i].Url)
-		}
-	}
+	// for i := range ret {
+	// 	if ret[i].Title == ""{
+	// 		ret[i].Title = api.GetTitle(ret[i].Url)
+	// 	}
+	// }
 
 	fmt.Println(time.Since((start)))
 
@@ -71,20 +71,20 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 				step[temp[j]] = to_be_processed[i]
 
 				if temp[j].Url == target {
-					var ret []models.Page
-					step_temp := temp[j]
+					// var ret []models.Page
+					// step_temp := temp[j]
 
-					ret = append(ret, step_temp)
+					// ret = append(ret, step_temp)
 
-					for {
-						if step[step_temp].Url == start {
-							break
-						} else {
-							ret = append(ret, step[step_temp])
-							step_temp = step[step_temp]
-						}
-					}
-					return ret, depth, len(visited)
+					// for {
+					// 	if step[step_temp].Url == start {
+					// 		break
+					// 	} else {
+					// 		ret = append(ret, step[step_temp])
+					// 		step_temp = step[step_temp]
+					// 	}
+					// }
+					return getPath(start, step, temp[j]), depth, len(visited)
 				}
 			} else {
 				temp = append(temp[:j], temp[j+1:]...)
@@ -97,15 +97,17 @@ func runBFSHelper(start string, target string, visited map[string]bool, step map
 	return runBFSHelper(start, target, visited, step, new_process, depth, count)
 }
 
-func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be_processed []models.Page, step map[models.Page]models.Page, depth int, max_go int) ([]models.Page, int, int){
+func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be_processed []models.Page, step map[models.Page]models.Page, depth int, max_go int) ([][]models.Page, int, int){
 	st := time.Now()
 	guard := make(chan struct{}, max_go)
 	var lock sync.Mutex
 	var wg sync.WaitGroup
 
-	var process []models.Page
-
 	var next_process []models.Page
+
+	var result [][]models.Page
+
+	// added := make(map[string]bool)
 
 	for i := range to_be_processed {
 		guard <- struct{}{}
@@ -115,47 +117,71 @@ func runBFSGoRoutine(start string, target string, visited map[string]bool, to_be
 			defer func(){
 				<-guard
 				wg.Done()
-				// fmt.Println("Terminate")
+				// fmt.Println("Terminate " + page.Title)
 			}()
 			temp := api.Scraper(page.Url)
 			lock.Lock()
 
 			visited[page.Url] = true
-			process = append(process, temp...)
 
 			for j := range temp {
-				step[temp[j]] = page
-			}
+				if !visited[temp[j].Url]{
+					_, val := step[temp[j]]
+					if !val{
+						step[temp[j]] = page
+					}
+					next_process = append(next_process, temp[j])
+					if temp[j].Url == target {
+						fmt.Println("found from " + page.Url)
+						var path_i []models.Page
+						if page.Url == start {
 
+						} else {
+							path_i = getPath(start, step, page)
+						}
+						// path_i = append(path_i, temp[j])
+						result = append(result, path_i)
+						break
+					}
+				}
+			}
 			lock.Unlock()
 		}(to_be_processed[i])
 	}
 
 	wg.Wait()
-	fmt.Println(len(process))
+	fmt.Println(len(result))
 	fmt.Println(time.Since(st))
-	for i := range process {
-		// fmt.Println(i)
-		if !visited[process[i].Url] {
-			next_process = append(next_process, process[i])
-		}
-		if process[i].Url == target {
-			var ret []models.Page
-			step_temp := process[i]
 
-			ret = append(ret, step_temp)
+	if len(result) == 0{
+		depth++
+		return runBFSGoRoutine(start, target, visited, next_process, step, depth, max_go)
+	} else {
+		return result, depth, len(visited)
+	}
+}
 
-			for {
-				if step[step_temp].Url == start {
-					break
-				} else {
-					ret = append(ret, step[step_temp])
-					step_temp = step[step_temp]
-				}
-			}
-			return ret, depth, len(visited)
+func reverse(ret []models.Page) []models.Page {
+	for i, j := 0, len(ret)-1; i < j; i, j = i+1, j-1 {
+		ret[i], ret[j] = ret[j], ret[i]
+	}
+	return ret
+}
+
+func getPath(start string, step map[models.Page]models.Page, page models.Page) []models.Page {
+	var ret []models.Page
+	step_temp := page
+
+	ret = append(ret, step_temp)
+
+	for {
+		if step[step_temp].Url == start {
+			break
+		} else {
+			ret = append(ret, step[step_temp])
+			step_temp = step[step_temp]
 		}
 	}
-	depth++
-	return runBFSGoRoutine(start, target, visited, next_process, step, depth, max_go)
+
+	return ret
 }
