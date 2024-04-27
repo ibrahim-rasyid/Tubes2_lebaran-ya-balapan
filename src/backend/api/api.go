@@ -31,6 +31,7 @@ func handleBFS(c *fiber.Ctx) error{
 
 func handleIDS(c *fiber.Ctx) error{
 	var data map[string]string
+	var temp_result [][]models.Page
 
 	// parse body to Page struct, binds the request body to Page struct
 	err := c.BodyParser(&data)
@@ -39,9 +40,9 @@ func handleIDS(c *fiber.Ctx) error{
 	}
 
 	result := algorithm.IDS(data["startPage"], data["endPage"], data["startUrl"], data["goalUrl"])
-
-	response := models.Result{
-		Steps: result.Steps,
+	temp_result = append(temp_result, result.Steps)
+	response := models.Response{
+		Steps: temp_result,
 		Accessed: result.Accessed,
 		N_step: result.N_step,
 		Time: result.Time,

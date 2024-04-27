@@ -1,6 +1,8 @@
 package models
 
 type Response struct {
-	Result 	[]Page 	`json:"result"`
-	Runtime  float64 `json:"time"`
+	Accessed int		`json:"accessed"`
+	N_step   int		`json:"n_step"`
+	Steps    [][]Page	`json:"steps"`
+	Time     float64	`json:"time"`
 }

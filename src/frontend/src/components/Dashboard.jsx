@@ -1,7 +1,6 @@
 import React, {useState, useEffect } from 'react'
 import Query from './Query';
 import ToggleSwitch from './Switch';
-// import Graph from './Graph'
 
 export default function Dashboard({onResultChange, onSearch}) {
     const [startPageInput, setStartPageInput] = useState({title:'', url:''})
