@@ -44,6 +44,12 @@ func RunBFS(pageUrl string, target string, max_goroutine int, max_result int) mo
 		ret[i] = reverse(ret[i])
 	}
 
+	if max_result != 0 {
+		if max_result < len(ret){
+			ret = ret[:max_result]
+		}
+	}
+
 	var return_val models.Response
 
 	return_val.N_step = depth
