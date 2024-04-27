@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func GetTitle(url string) string{
+func GetTitle(url string) string{ // To extract a title from a wikipedia page
 	c := colly.NewCollector()
 
 	var title string
@@ -21,7 +21,7 @@ func GetTitle(url string) string{
 	if err != nil {
 		return ""
 	}
-	title = strings.Trim(title, " - Wikipedia")
+	title = strings.ReplaceAll(title, " - Wikipedia", "") // To trim excess title string
 	return title
 }
 
