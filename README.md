@@ -43,8 +43,11 @@ WikiRace  permainan dimana pemain mulai pada suatu artikel Wikipedia dan harus m
 ## Pemakaian
 
 1. Masukkan judul artikel awal dan tujuan
+![GUI Screenshot](./img/usage.png)
 2. Pilih jenis algoritma yang diinginkan
+![GUI Screenshot](./img/usage2.png)
 3. Klik tombol "Search" untuk melihat hasil
+![GUI Screenshot](./img/result.png)
 
 ## Kontributor
 
